@@ -1,4 +1,4 @@
-import escRx from 'escape-string-regexp';
+import escRx from '@esm2cjs/escape-string-regexp';
 const operators = [
   '\u00A8',
   '\u0021',
