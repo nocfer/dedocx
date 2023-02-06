@@ -45,7 +45,7 @@ export default function walkDocument(ctx, callback) {
   let passthrough = (src, out, w) => w.walk(out);
   let skip = () => {};
 
-  let nameForNode = n => {
+  let nameForNode = (n) => {
     let name = '';
     if (n.namespaceURI) {
       if (!reverseMap[n.namespaceURI]) {
@@ -69,9 +69,9 @@ export default function walkDocument(ctx, callback) {
     return el(ln, attr, out);
   };
 
-  let extractAttr = src => {
+  let extractAttr = (src) => {
     let attr = {};
-    Array.from(src.attributes).forEach(atn => {
+    Array.from(src.attributes).forEach((atn) => {
       attr[`data-${nameForNode(atn)}`] = atn.value;
     });
     return attr;
@@ -81,12 +81,12 @@ export default function walkDocument(ctx, callback) {
   let el;
   let inTable = false;
 
-  Object.keys(prefixMap).forEach(pfx => (reverseMap[prefixMap[pfx]] = pfx));
+  Object.keys(prefixMap).forEach((pfx) => (reverseMap[prefixMap[pfx]] = pfx));
   walker = walker
     // #document
     .match(m.document(), (src, out, w) => {
       const {
-        window: { document: doc }
+        window: { document: doc },
       } = new JSDOM('');
       const nod = nodal(doc, {}, prefixMap);
       const meta = doc.createElement('meta');
@@ -108,7 +108,7 @@ export default function walkDocument(ctx, callback) {
         'w:t',
         'w:sdtContent',
         'm:oMathPara',
-        'm:oMathParaPr'
+        'm:oMathParaPr',
       ].map(elMatch),
       passthrough
     )
@@ -132,7 +132,7 @@ export default function walkDocument(ctx, callback) {
         'w:rubyPr',
         // might revert
         'w:tblGrid',
-        'w:sectPr'
+        'w:sectPr',
       ].map(elMatch),
       skip
     )
@@ -163,7 +163,7 @@ export default function walkDocument(ctx, callback) {
       }
 
       if (elDef.attr) {
-        Object.keys(elDef.attr).forEach(n =>
+        Object.keys(elDef.attr).forEach((n) =>
           output.setAttribute(n, elDef.attr[n])
         );
       }
@@ -203,7 +203,7 @@ export default function walkDocument(ctx, callback) {
         'w:permEnd',
         'w:commentRangeStart',
         'w:commentRangeEnd',
-        'w:commentReference'
+        'w:commentReference',
       ].map(elMatch),
       (src, out, w) => {
         if (inTable) {
@@ -229,7 +229,7 @@ export default function walkDocument(ctx, callback) {
       let attr = {
         src: linkRel.fullPath,
         'data-dedocx-rel-target': linkRel.target,
-        'data-dedocx-rel-package-path': linkRel.packagePath
+        'data-dedocx-rel-package-path': linkRel.packagePath,
       };
       // NOTE: a:blip can contain other elements, for now we just ignore that
       el('img', attr, out);
@@ -246,7 +246,7 @@ export default function walkDocument(ctx, callback) {
       let attr = {
         src: linkRel.fullPath,
         'data-dedocx-rel-target': linkRel.target,
-        'data-dedocx-rel-package-path': linkRel.packagePath
+        'data-dedocx-rel-package-path': linkRel.packagePath,
       };
       el('img', attr, out);
     })
@@ -269,7 +269,7 @@ export default function walkDocument(ctx, callback) {
             'data-dedocx-caption-target-type': src.getAttributeNS(
               SA_NS,
               'caption-target-type'
-            )
+            ),
           },
           out
         )
@@ -290,7 +290,7 @@ export default function walkDocument(ctx, callback) {
           src: src.getAttribute('full-path'),
           'data-dedocx-rel-target': src.getAttribute('src'),
           'data-dedocx-rel-package-path': src.getAttribute('package-path'),
-          style: style || undefined
+          style: style || undefined,
         },
         div
       );
@@ -317,7 +317,7 @@ export default function walkDocument(ctx, callback) {
               SA_NS,
               'caption-target-type'
             ),
-            id
+            id,
           },
           out
         ),
@@ -341,7 +341,7 @@ export default function walkDocument(ctx, callback) {
       let attr = {
         colspan: src.getAttributeNS(SA_NS, 'colspan'),
         rowspan: src.getAttributeNS(SA_NS, 'rowspan'),
-        id: src.getAttributeNS(SA_NS, 'id')
+        id: src.getAttributeNS(SA_NS, 'id'),
       };
       let elName = 'td';
       let colhead = src.getAttributeNS(SA_NS, 'colhead');
@@ -401,7 +401,7 @@ export default function walkDocument(ctx, callback) {
           'div',
           {
             class: 'dedocx-caption',
-            'data-dedocx-caption-group': src.getAttribute('group')
+            'data-dedocx-caption-group': src.getAttribute('group'),
           },
           out
         )
@@ -454,7 +454,7 @@ export default function walkDocument(ctx, callback) {
       let id = src.getAttributeNS(SA_NS, 'id');
       let hasProps = !!Object.keys(props).length || id;
       let elDef = styleMap[props.rStyle || 'DefaultParagraphFont'] || {
-        el: 'span'
+        el: 'span',
       };
       let output;
       let walk;
@@ -500,7 +500,7 @@ export default function walkDocument(ctx, callback) {
         output = walk = el(ln || 'span', {}, out);
       }
       if (elDef.attr) {
-        Object.keys(elDef.attr).forEach(n =>
+        Object.keys(elDef.attr).forEach((n) =>
           output.setAttribute(n, elDef.attr[n])
         );
       }
@@ -560,11 +560,11 @@ export default function walkDocument(ctx, callback) {
         suppressTitle: false,
         page: undefined,
         volume: undefined,
-        tags: cites
+        tags: cites,
       };
       let attr = {
         href: `#${first}`,
-        'data-dedocx-citation-options': dataProps(options)
+        'data-dedocx-citation-options': dataProps(options),
       };
       w.walk(el('a', attr, out));
     })
@@ -577,7 +577,7 @@ export default function walkDocument(ctx, callback) {
           src.hasAttributeNS(W_NS, 'id') &&
           `dedocx-${ln}-${src.getAttributeNS(W_NS, 'id')}`,
         datetime: src.getAttributeNS(W_NS, 'date'),
-        'data-dedocx-author': src.getAttributeNS(W_NS, 'author')
+        'data-dedocx-author': src.getAttributeNS(W_NS, 'author'),
       };
       w.walk(el(ln, attr, out));
     })
@@ -620,7 +620,7 @@ export default function walkDocument(ctx, callback) {
       let elName;
       let content = '';
       let attr = {};
-      let fst = val => {
+      let fst = (val) => {
         if (typeof val === 'undefined') {
           return undefined;
         }
@@ -661,13 +661,13 @@ export default function walkDocument(ctx, callback) {
           suppressTitle: field.t,
           page: field.p,
           volume: field.v,
-          tags: field.m
+          tags: field.m,
         };
         attr['data-dedocx-citation-options'] = dataProps(options);
       } else if (field.type === 'EN.CITE') {
         // here we don't actually want to keep the content
         let tags = select('.//w:hyperlink', src)
-            .map(hyper => hyper.getAttributeNS(W_NS, 'anchor'))
+            .map((hyper) => hyper.getAttributeNS(W_NS, 'anchor'))
             .filter(Boolean),
           firstTag = tags.shift(),
           enAttr = {};
@@ -690,7 +690,7 @@ export default function walkDocument(ctx, callback) {
           suppressTitle: false,
           page: undefined,
           volume: undefined,
-          tags
+          tags,
         };
         enAttr['data-dedocx-citation-options'] = dataProps(options);
         let output = el('a', enAttr, out);
@@ -704,7 +704,7 @@ export default function walkDocument(ctx, callback) {
           ref: fst(field.l),
           usemap: fst(field.m),
           target: fst(field.t) || (fst(field.n) && '_blank'),
-          tooltip: fst(field.o)
+          tooltip: fst(field.o),
         };
         if (switches.href) {
           attr.href = switches.href;
@@ -789,7 +789,7 @@ export default function walkDocument(ctx, callback) {
         {
           role: isBiblio ? 'doc-bibliography' : undefined,
           'data-dedocx-props': dataProps(prProps, 'para'),
-          'data-dedocx-endprops': dataProps(endPrProps, 'para')
+          'data-dedocx-endprops': dataProps(endPrProps, 'para'),
         },
         out
       );
