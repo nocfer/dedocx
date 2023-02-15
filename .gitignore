@@ -40,3 +40,7 @@ __dump__*
 
 # Ignore IntelliJ files.
 .idea
+
+tmp
+*.docx
+*.html

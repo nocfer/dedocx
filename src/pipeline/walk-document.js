@@ -466,7 +466,13 @@ export default function walkDocument(ctx, callback) {
       } else {
         let ln = elDef.el;
         if (!ln || ln === 'span') {
-          if (props.b) {
+          if (props.vertAlign === 'subscript') {
+            ln = 'sub';
+            delete props.vertAlign;
+          } else if (props.vertAlign === 'superscript') {
+            ln = 'sup';
+            delete props.vertAlign;
+          } else if (props.b) {
             ln = 'strong';
             delete props.b;
           } else if (props.i) {
@@ -483,12 +489,6 @@ export default function walkDocument(ctx, callback) {
             if (props.dstrike) {
               delete props.dstrike;
             }
-          } else if (props.vertAlign === 'subscript') {
-            ln = 'sub';
-            delete props.vertAlign;
-          } else if (props.vertAlign === 'superscript') {
-            ln = 'sup';
-            delete props.vertAlign;
           } else if (props.rtl) {
             ln = 'bdi';
           }
