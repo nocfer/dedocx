@@ -10,6 +10,7 @@
     "watch": "babel --watch src --out-dir dist",
     "update-readme": "babel-node src/lib/generate-minimum-docx-output.js",
     "prepublish": "npm run build",
+    "postinstall": "npm run build",
     "postversion": "npm run update-readme && git push && git push --tags"
   },
   "babel": {
