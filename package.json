@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --single-quote --write \"{src,test}/**/*.js\"",
     "test": "mocha --reporter spec --require @babel/register --exit",
-    "build": "rm -rf dist/* && babel src --out-dir dist",
+    "build": "npm install && rm -rf dist/* && babel src --out-dir dist",
     "watch": "babel --watch src --out-dir dist",
     "update-readme": "babel-node src/lib/generate-minimum-docx-output.js",
     "prepublish": "npm run build",
